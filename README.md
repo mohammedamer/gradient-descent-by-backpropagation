@@ -26,61 +26,19 @@ def sig(x):
 
 # Forward Calculation
 
-$\mathbf{z_1} = \mathbf{X}\mathbf{w_1} + b_1$
-
-$\mathbf{h_1} = relu(\mathbf{z_1})$
-
-$\mathbf{z_2} = \mathbf{X}\mathbf{w_2} + b_2$
-
-$\mathbf{h_2} = relu(\mathbf{z_2})$
-
-$\mathbf{H} = [h_1, h_2]$
-
-$\mathbf{z_3} = \mathbf{H}\mathbf{w_3} + b_3$
-
-$\mathbf{y'} = \sigma(z_3)$
+![Forward](images/forward.png)
 
 # Grad Calculation
 
-$L = -\frac{1}{n}[\mathbf{y}^\intercal\ln(\mathbf{y'}) + (1 - \mathbf{y})^\intercal\ln{(1 - \mathbf{y'})}]$
-
-$\nabla_{w_3} L = (\frac{\partial z_3}{\partial w_3})^\intercal(\frac{\partial y'}{\partial z_3})^\intercal\nabla_{y'} L$
-
-$\nabla_{w_1} L = (\frac{\partial z_1}{\partial w_1})^\intercal(\frac{\partial h_1}{\partial z_1})^\intercal(\frac{\partial z_3}{\partial h_1})^\intercal(\frac{\partial y'}{\partial z_3})^\intercal\nabla_{y'} L$
-
-$\nabla_{w_2} L = (\frac{\partial z_2}{\partial w_2})^\intercal(\frac{\partial h_2}{\partial z_2})^\intercal(\frac{\partial z_3}{\partial h_2})^\intercal(\frac{\partial y'}{\partial z_3})^\intercal\nabla_{y'} L$
-
-$\frac{\partial L}{\partial b_1} = (\frac{\partial z_1}{\partial b_1})^\intercal(\frac{\partial h_1}{\partial z_1})^\intercal(\frac{\partial z_3}{\partial h_1})^\intercal(\frac{\partial y'}{\partial z_3})^\intercal\nabla_{y'} L$
-
-$\frac{\partial L}{\partial b_2} = (\frac{\partial z_2}{\partial b_2})^\intercal(\frac{\partial h_2}{\partial z_2})^\intercal(\frac{\partial z_3}{\partial h_2})^\intercal(\frac{\partial y'}{\partial z_3})^\intercal\nabla_{y'} L$
-
-$\frac{\partial L}{\partial b_3} = (\frac{\partial z_3}{\partial b_3})^\intercal(\frac{\partial y'}{\partial z_3})^\intercal\nabla_{y'} L$
+![Backward](images/backward.png)
 
 # Individual Grad
 
-$\nabla_{y'} L = -\frac{1}{n}[\frac{\mathbf{y}}{\mathbf{y'}} - \frac{(1-\mathbf{y})}{(1-\mathbf{y'})}]$
-
-$\frac{\partial y'}{\partial z_3} = diag(\mathbf{y'}\bigodot(1 - \mathbf{y'}))$
-
-$\frac{\partial z_3}{\partial h_1} = \{\mathbf{w}_{3,1}\}^n$
-
-$\frac{\partial z_3}{\partial h_2} = \{\mathbf{w}_{3,2}\}^n$
-
-$\frac{\partial h_1}{\partial z_1} = diag(min(1, \mathbf{h_1}))$
-
-$\frac{\partial h_2}{\partial z_2} = diag(min(1, \mathbf{h_2}))$
-
-$\frac{\partial z_3}{\partial w_3} = \mathbf{H}$
-
-$\frac{\partial z_1}{\partial w_1} = \mathbf{X}$
-
-$\frac{\partial z_2}{\partial w_2} = \mathbf{X}$
-
-$\frac{\partial z_1}{\partial b_1} = \frac{\partial z_2}{\partial b_2} = \frac{\partial z_3}{\partial b_3} = \mathbf{1}$
+![Grads](images/grads.png)
 
 ## Chain rule for vector case
 
-$\nabla_{w_3} L = (\frac{\partial z_3}{\partial w_3})^\intercal(\frac{\partial y'}{\partial z_3})^\intercal\nabla_{y'} L$
+![Chain Rule](images/chain.png)
 
 A case like the previous one is calculated by the chain rule applied in reverse. As we want the result to be a column vector so we, effictively, transpose the gradient term, even if it is not explicitly annotated. Now, as the gradient is transposed, then the whole calculation needs to be transposed. The standard form of Jacobian is that the nominator is expanded in columns and denominator in rows. Now as the reverse is true for the transposed gradient, we need to transpose all the Jacobians, and reversing them of course, so that nominators and denominators are matched as the original chain rule.
 
